@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Martínez Cybersecurity Solutions</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- GSAP (animations) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+
+  <style>
+    :root{
+      --blue:#0033A0;          /* french blue */
+      --white:#ffffff;
+      --glass: rgba(255,255,255,0.06);
+      --muted:#f3f6fb;
+      --text:#0f1724;
+      --accent:#0072ff;
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#ffffff 0%, #f7fbff 100%);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      scroll-behavior:smooth;
+    }
+
+    /* Layout */
+    .container{max-width:1100px;margin:0 auto;padding:48px 24px;}
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap:28px;
+      align-items:center;
+      margin-bottom:36px;
+    }
+
+    .brand{
+      background: linear-gradient(135deg, rgba(0,51,160,0.95), rgba(0,114,255,0.85));
+      color:var(--white);
+      padding:40px;
+      border-radius:var(--radius);
+      box-shadow: 0 20px 50px rgba(3,18,44,0.12);
+      position:relative;
+      overflow:hidden;
+    }
+    .brand h1{
+      font-size:clamp(26px,4vw,40px);
+      margin:0 0 8px 0;
+      letter-spacing:0.6px;
+      font-weight:800;
+    }
+    .brand p{margin:0 0 16px 0; font-weight:300; opacity:0.95;}
+    .tag{display:inline-block;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,0.1);font-weight:600;font-size:13px}
+
+    /* futuristic accent shapes */
+    .blob{
+      position:absolute; right:-60px; top:-40px; width:360px; height:360px;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.12), transparent 25%), rgba(255,255,255,0.02);
+      border-radius:50%;
+      transform:rotate(15deg);
+      filter: blur(18px);
+      mix-blend-mode: overlay;
+    }
+
+    .hero-visual{
+      background: linear-gradient(180deg,#ffffff, #f2f8ff);
+      border-radius:var(--radius);
+      padding:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:100%;
+      box-shadow: 0 8px 30px rgba(3,18,44,0.06);
+    }
+
+    .visual-card{
+      width:100%; max-width:360px; border-radius:14px; overflow:hidden;
+      background:linear-gradient(180deg, rgba(0,51,160,0.08), rgba(0,51,160,0.02));
+      display:flex; flex-direction:column; align-items:center; padding:18px;
+      gap:14px;
+    }
+    .visual-card img{width:100%;height:auto;border-radius:8px; display:block; object-fit:cover}
+    .visual-card .cta{
+      display:inline-block;padding:10px 14px;border-radius:12px;background:var(--blue);color:var(--white);font-weight:700;text-decoration:none;
+      box-shadow: 0 6px 18px rgba(0,51,160,0.18);
+    }
+
+    /* Sections */
+    section{margin:46px 0;padding:36px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.85), rgba(250,252,255,0.95));box-shadow:0 12px 30px rgba(3,18,44,0.04)}
+    section .section-header{display:flex;align-items:center;gap:16px;margin-bottom:18px}
+    .section-header h2{color:var(--blue);font-size:20px;margin:0}
+    .section-sub{color:#567; font-size:14px; margin-left:auto}
+
+    /* two-column content */
+    .two-col{display:grid;grid-template-columns:1fr 320px;gap:22px;align-items:start}
+    .card{background:var(--white);padding:18px;border-radius:12px;box-shadow: 0 8px 22px rgba(3,18,44,0.04)}
+    ol{padding-left:18px;margin:0}
+    ul{padding-left:16px;margin:0}
+
+    /* result cards */
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .result{
+      padding:18px;border-radius:12px;background:linear-gradient(135deg, rgba(0,51,160,0.04), rgba(0,114,255,0.02));
+      border:1px solid rgba(0,51,160,0.06);
+      transition:transform .45s cubic-bezier(.2,.9,.2,1),box-shadow .45s;
+    }
+    .result:hover{transform:translateY(-8px); box-shadow: 0 28px 60px rgba(0,51,160,0.08)}
+
+    /* team */
+    .team-list{display:flex;flex-direction:column;gap:10px}
+    .member{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(0,0,0,0.02),transparent)}
+    .member strong{color:var(--blue)}
+    .mail{font-size:13px;color:#184}
+
+    /* bibliography */
+    .bib a{color:var(--blue); text-decoration:none}
+    .footer{
+      display:flex;justify-content:space-between;align-items:center;gap:18px;padding:22px;border-radius:12px;margin-top:28px;background:linear-gradient(180deg,#001f5f 0%, #002e8c 100%);color:var(--white)
+    }
+
+    /* responsive */
+    @media (max-width:1000px){
+      .hero{grid-template-columns:1fr; padding-bottom:8px}
+      .two-col{grid-template-columns:1fr}
+      .container{padding:28px 18px}
+    }
+  </style>
+</head>
+<body>
+
+  <main class="container">
+
+    <!-- HERO -->
+    <header class="hero" aria-label="Hero">
+      <div class="brand" id="brand">
+        <div class="blob" aria-hidden="true"></div>
+        <div class="tag">CYBERSECURITY • SOLUTIONS</div>
+        <h1>Martínez Cybersecurity Solutions</h1>
+        <p><em>"Cybersecurity is not just protection — it is a guarantee for the future."</em></p>
+        <p style="opacity:.95; font-size:14px; margin-top:12px">
+          We provide reliable services that protect data, systems and people from digital threats using modern technologies and human-centered training.
+        </p>
+        <div style="margin-top:18px;display:flex;gap:12px">
+          <a class="cta" href="#contact">Contact the team</a>
+          <a class="cta" style="background:transparent;border:1px solid rgba(255,255,255,0.18)">Download report</a>
+        </div>
+      </div>
+
+      <aside class="hero-visual" id="visual">
+        <div class="visual-card" aria-hidden="true">
+          <img src="https://images.unsplash.com/photo-1483817101829-339b08e8d83f?q=80&w=1104&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="cybersecurity visual">
+          <div style="width:100%;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-weight:700;color:var(--blue)">Services</div>
+              <div style="font-size:13px;color:#334">Protection • Monitoring • Training • Backup</div>
+            </div>
+            <a class="cta" href="#methodology" style="padding:8px 12px;font-weight:700">See methodology</a>
+          </div>
+        </div>
+      </aside>
+    </header>
+
+    <!-- INTRODUCTION -->
+    <section id="introduction" class="card" aria-labelledby="intro-title">
+      <div class="section-header">
+        <h2 id="intro-title">Introduction</h2>
+        <div class="section-sub">Project report summary</div>
+      </div>
+      <div class="two-col">
+        <div>
+          <p>
+            We are a team of five Systems Engineering students presenting ourselves as a cybersecurity company.
+            Our mission is to provide reliable services that protect data, systems, and people from digital threats.
+            In today's world, technology is essential for every organization, but it brings risks such as hackers,
+            malware and data theft. Many companies lack the knowledge or resources to defend themselves — this is
+            where our company steps in.
+          </p>
+          <p>
+            Our service is designed to give clients peace of mind, protecting their most valuable digital assets and
+            ensuring business continuity. Choosing cybersecurity is both a technical and strategic decision for the
+            future of any organization.
+          </p>
+          <p><strong>Keywords:</strong> cybersecurity • protection • safety</p>
+        </div>
+
+        <div>
+          <div class="card" style="background:linear-gradient(180deg,#f9fbff, #ffffff)">
+            <h3 style="margin:0 0 8px 0;color:var(--blue)">Quick facts</h3>
+            <p style="margin:0 0 6px 0;font-size:14px">Team: 5 students (Systems Engineering)</p>
+            <p style="margin:0;font-size:14px">Deliverables: report, brochure, oral presentation, website</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OBJECTIVES -->
+    <section id="objectives" class="card" aria-labelledby="obj-title">
+      <div class="section-header">
+        <h2 id="obj-title">Objectives</h2>
+        <div class="section-sub">What we aim to achieve</div>
+      </div>
+
+      <p>Our main objective is to offer complete cybersecurity solutions adapted to each client's needs. Specifically, we want to:</p>
+      <ul style="margin-top:12px">
+        <li>Protect sensitive information from external and internal attacks.</li>
+        <li>Reduce risks and financial losses caused by cyber incidents.</li>
+        <li>Train employees to identify and avoid common threats such as phishing or ransomware.</li>
+      </ul>
+
+      <p style="margin-top:14px">These objectives matter because cyberattacks are increasing every year and the damage they cause can be very costly. Our service helps companies stay safe, maintain client trust, and continue operating without interruptions.</p>
+    </section>
+
+    <!-- METHODOLOGY -->
+    <section id="methodology" class="card" aria-labelledby="met-title">
+      <div class="section-header">
+        <h2 id="met-title">Methodology</h2>
+        <div class="section-sub">Step-by-step approach</div>
+      </div>
+
+      <p>We follow a clear methodology to deliver effective results. Below are the five main stages we apply for every client.</p>
+
+      <ol style="margin-top:12px">
+        <li><strong>Initial Analysis:</strong> Study the client’s current security posture, identify risks and weak points.</li>
+        <li><strong>Design of Solutions:</strong> Create a customized security plan with tools and strategies tailored to the client.</li>
+        <li><strong>Implementation:</strong> Install and configure firewalls, antivirus systems, monitoring tools, and backup systems.</li>
+        <li><strong>Training:</strong> Provide workshops and simple guides for employees to increase awareness and reduce human error.</li>
+        <li><strong>Monitoring & Support:</strong> Continuous monitoring and rapid incident response.</li>
+      </ol>
+
+      <p style="margin-top:12px">We also leverage modern tech such as cloud-based security, real-time monitoring, and artificial intelligence to detect suspicious behavior — combining technology with human education for best results.</p>
+    </section>
+
+    <!-- RESULTS -->
+    <section id="results" class="card" aria-labelledby="res-title">
+      <div class="section-header">
+        <h2 id="res-title">Results</h2>
+        <div class="section-sub">Benefits observed</div>
+      </div>
+
+      <div class="cards" style="margin-top:12px">
+        <div class="result">
+          <h3 style="margin:0 0 8px 0">Stronger Protection</h3>
+          <p style="margin:0">Firewalls, antivirus and monitoring keep networks and devices protected from attacks.</p>
+        </div>
+
+        <div class="result">
+          <h3 style="margin:0 0 8px 0">Data Safety</h3>
+          <p style="margin:0">Backup and recovery plans ensure that information can be restored after an incident.</p>
+        </div>
+
+        <div class="result">
+          <h3 style="margin:0 0 8px 0">Employee Awareness</h3>
+          <p style="margin:0">Training reduces risks and prevents simple mistakes that could cause big problems.</p>
+        </div>
+
+        <div class="result">
+          <h3 style="margin:0 0 8px 0">Peace of Mind</h3>
+          <p style="margin:0">Clients can focus on their business while we manage security and incident response.</p>
+        </div>
+      </div>
+
+      <p style="margin-top:14px">From research and practice, we observed that organizations that combine technology with training reduce incidents and increase resilience against cyberattacks.</p>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section id="conclusion" class="card" aria-labelledby="con-title">
+      <div class="section-header">
+        <h2 id="con-title">Conclusion</h2>
+        <div class="section-sub">Summary & future plans</div>
+      </div>
+
+      <p>Our cybersecurity service is a complete solution for modern companies: we analyze, design, implement and support security systems to keep clients protected in a digital world full of risks. We achieved our objectives by combining technical tools and human training.</p>
+
+      <p><strong>Future plans:</strong> Expand services with ethical hacking, AI for early detection, and more advanced training programs. With our company, cybersecurity is not just protection — it is a guarantee for the future.</p>
+    </section>
+
+    <!-- BIBLIOGRAPHY -->
+    <section id="bibliography" class="card bib" aria-labelledby="bib-title">
+      <div class="section-header">
+        <h2 id="bib-title">Bibliography</h2>
+        <div class="section-sub">Sources used</div>
+      </div>
+
+      <ul style="margin-top:6px;line-height:1.6">
+        <li>America’s Cyber Defense Agency. (2025). Cybersecurity Awareness Month. <a href="https://www.cisa.gov/cybersecurity-awareness-month" target="_blank" rel="noopener">cisa.gov/cybersecurity-awareness-month</a></li>
+        <li>European Union Agency for Cybersecurity (ENISA). (2023). ENISA Threat Landscape Report 2023. <a href="https://www.enisa.europa.eu" target="_blank" rel="noopener">enisa.europa.eu</a></li>
+        <li>Symantec. (2023). Internet Security Threat Report 2023. <a href="https://www.symantec.com" target="_blank" rel="noopener">symantec.com</a></li>
+      </ul>
+    </section>
+
+    <!-- TEAM & CONTACT -->
+    <section id="contact" class="card" aria-labelledby="team-title">
+      <div class="section-header">
+        <h2 id="team-title">Our Team & Contact</h2>
+        <div class="section-sub">Emails & roles</div>
+      </div>
+
+      <div class="team-list" style="margin-top:8px">
+        <div class="member"><div><strong>Arccidiacono Fabricio</strong><div style="font-size:13px;color:#445">Systems & Implementation</div></div><div><a class="mail" href="mailto:fabricioarccidiacono@gmail.com">fabricioarccidiacono@gmail.com</a></div></div>
+
+        <div class="member"><div><strong>Lasagno Valentino</strong><div style="font-size:13px;color:#445">Analysis & Monitoring</div></div><div><a class="mail" href="mailto:lasagnovalentino@gmail.com">lasagnovalentino@gmail.com</a></div></div>
+
+        <div class="member"><div><strong>Martinez Jose</strong><div style="font-size:13px;color:#445">Design & Strategy</div></div><div><a class="mail" href="mailto:josegabrielmartinez397@gmail.com">josegabrielmartinez397@gmail.com</a></div></div>
+
+        <div class="member"><div><strong>Sabio Antonio</strong><div style="font-size:13px;color:#445">Training & Support</div></div><div><a class="mail" href="mailto:antoniosabio76@gmail.com">antoniosabio76@gmail.com</a></div></div>
+
+        <div class="member"><div><strong>Videla Lautaro</strong><div style="font-size:13px;color:#445">Research & Documentation</div></div><div><a class="mail" href="mailto:lautaroagero@gmail.com">lautaroagero@gmail.com</a></div></div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer" role="contentinfo">
+      <div>© 2025 Martínez Cybersecurity Solutions</div>
+      <div style="opacity:.95">• All rights reserved</div>
+    </div>
+
+  </main>
+
+  <!-- JS: GSAP animations -->
+  <script>
+    window.addEventListener('load', () => {
+      gsap.registerPlugin(ScrollTrigger);
+
+      // initial hero animations
+      gsap.from("#brand h1", {y:30, opacity:0, duration:1, ease:"power3.out"});
+      gsap.from("#brand p", {y:18, opacity:0, duration:1.1, delay:.2});
+      gsap.from(".tag", {scale:.9, opacity:0, duration:.8, delay:.1});
+      gsap.from("#visual .visual-card", {y:20, opacity:0, duration:1, delay:.3, ease:"power2.out"});
+
+      // sections appear on scroll
+      gsap.utils.toArray("section.card").forEach((sec, i) => {
+        gsap.from(sec, {
+          scrollTrigger: {
+            trigger: sec,
+            start: "top 85%",
+            toggleActions: "play none none none"
+          },
+          y: 28,
+          opacity: 0,
+          duration: 0.85,
+          delay: i * 0.06,
+          ease: "power3.out"
+        });
+      });
+
+      // result cards stagger
+      gsap.from(".result", {
+        scrollTrigger: { trigger: "#results", start: "top 75%" },
+        y: 18, opacity: 0, duration: .8, stagger: .12, ease:"power3.out"
+      });
+
+      // subtle floating blob animation
+      gsap.to(".blob", { x: -12, y: 8, rotation: 4, duration: 6, yoyo: true, repeat: -1, ease: "sine.inOut" });
+
+      // hover micro-interactions
+      document.querySelectorAll(".member").forEach(el => {
+        el.addEventListener("mouseenter", () => gsap.to(el, { scale: 1.02, boxShadow: "0 18px 40px rgba(0,51,160,0.06)", duration: .35 }));
+        el.addEventListener("mouseleave", () => gsap.to(el, { scale: 1, boxShadow: "none", duration: .35 }));
+      });
+
+      // smooth scroll when clicking in-page links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if(target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>
